@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @RestController
@@ -20,7 +20,7 @@ public class InterestController {
     InterestService interestService;
 
     @PostMapping("/interest")
-    public List<InterestResponse> registerStudent(@RequestBody InterestRequest interestRequest) throws InvalidFieldsException {
+    public Set<InterestResponse> registerStudent(@RequestBody InterestRequest interestRequest) throws InvalidFieldsException {
         return interestService.interest(interestRequest);
     }
 

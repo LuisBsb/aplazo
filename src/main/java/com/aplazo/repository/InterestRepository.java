@@ -2,5 +2,5 @@ package com.aplazo.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface InterestRepository extends JpaRepository<Interest, Integer> {
+public interface InterestRepository extends JpaRepository<Interest, Long> {
 }
