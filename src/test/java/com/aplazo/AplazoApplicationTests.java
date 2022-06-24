@@ -3,12 +3,15 @@ package com.aplazo;
 import com.aplazo.controller.InterestController;
 import com.aplazo.dto.InterestRequest;
 import com.aplazo.dto.InterestResponse;
+import com.aplazo.exceptions.InvalidFieldsException;
 import com.aplazo.repository.Interest;
+import com.aplazo.repository.InterestRepository;
 import com.aplazo.repository.InterestResponseRep;
 import com.aplazo.service.InterestService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,40 +44,29 @@ class AplazoApplicationTests {
     @Autowired
     private InterestService interestService;
 
-    private Interest interest;
+    @MockBean
+    private InterestRepository interestRepository;
 
-    private InterestResponseRep interestResponseRep;
-
-    private InterestRequest interestRequest;
-
-    private Set<InterestResponseRep> interestResponse = new HashSet<InterestResponseRep>();
-
-    private Set<InterestResponse> response = new HashSet<InterestResponse>();
-
-    @BeforeEach
-    public void initMocks() {
-        interest = new Interest();
-        interest.setTerms(5);
-        interest.setRate(30.0);
-        interest.setAmount(10.0);
-        interestRequest = new InterestRequest();
-        interestRequest.setTerms(4);
-        interestRequest.setAmount(30.0);
-        interestRequest.setRate(5.0);
-        interestResponseRep = InterestResponseRep.builder().amount(interest.getAmount()).payment_number(2).payment_date(new Date()).interest(interest).build();
-        interestResponse.add(interestResponseRep);
-        response.add(InterestResponse.builder().amount(4.0).payment_date(new Date()).payment_number(1).build());
+    @Test
+    public void main() {
+        AplazoApplication.main(new String[] {});
     }
-//    @Test
-//    public void main() {
-//        AplazoApplication.main(new String[] {});
-//    }
-//
-//    @Test
-//    void registerStudent() throws Exception {
-//        Set<InterestResponse> response = interestService.interest(interestRequest);
-//        assertNotNull(response);
-//        assertEquals(4, response.size());
-//    }
+
+    @Test
+    void interest() throws Exception {
+        Set<InterestResponse> response = interestService.interest(InterestMock.getInterestRequest());
+        assertNotNull(response);
+        assertEquals(5, response.size());
+        assertEquals(2.02, response.stream().findFirst().get().getAmount());
+    }
+
+    @Test
+    void interestInvalidFieldsException() throws InvalidFieldsException {
+        try {
+            when(interestService.interest(null)).thenThrow(InvalidFieldsException.class);
+        } catch (Exception e) {
+            assertEquals(e.getMessage(), "Invalid fields insert.");
+        }
+    }
 
 }

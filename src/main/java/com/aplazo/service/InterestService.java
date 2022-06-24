@@ -7,10 +7,12 @@ import com.aplazo.repository.Interest;
 import com.aplazo.repository.InterestRepository;
 import com.aplazo.repository.InterestResponseRep;
 import lombok.AllArgsConstructor;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
